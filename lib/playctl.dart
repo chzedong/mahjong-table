@@ -16,8 +16,7 @@ class PlayController {
   int get bankerIndex {
     if (kDebugMode) {
       print('bankerIndex: $banker');
-      print('score:' +
-          (players[0] + players[1] + players[2] + players[3]).toString());
+      print('score:${players[0] + players[1] + players[2] + players[3]}');
     }
     return banker[0] % players.length;
   }

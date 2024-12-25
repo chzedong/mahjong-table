@@ -3,7 +3,7 @@ import 'package:flutter_application_1/playctl.dart';
 import 'package:flutter_application_1/player.dart';
 
 class Play extends StatefulWidget {
-  const Play({Key? key}) : super(key: key);
+  const Play({super.key});
 
   @override
   State<Play> createState() => _PlayState();
@@ -43,7 +43,7 @@ class _PlayState extends State<Play> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
@@ -80,7 +80,7 @@ class _PlayState extends State<Play> {
                                               playController.reset();
                                             });
                                           },
-                                          child: Text('确认'),
+                                          child: const Text('确认'),
                                         )
                                       ]);
                                 });
@@ -92,7 +92,7 @@ class _PlayState extends State<Play> {
               )),
           Expanded(
               flex: 1,
-              child: Container(
+              child: SizedBox(
                   width: double.infinity,
                   child: Column(
                     children: getPlayers().toList(),
