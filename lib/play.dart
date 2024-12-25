@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_application_1/playctl.dart';
+import 'package:flutter/material.dart' hide Action;
+import 'package:flutter_application_1/entity/playctl.dart';
 import 'package:flutter_application_1/player.dart';
+import 'package:flutter_application_1/type.dart';
 
 class Play extends StatefulWidget {
   const Play({super.key});
@@ -11,6 +12,13 @@ class Play extends StatefulWidget {
 
 class _PlayState extends State<Play> {
   final PlayController playController = PlayController();
+
+  _dispatch(Action action, String name, int attach,
+      {bool ziMo = false, bool isLong = false}) {
+    setState(() {
+      playController.dispatch(action, name, attach, ziMo: ziMo, isLong: isLong);
+    });
+  }
 
   Iterable<Widget> getPlayers() {
     return playController.names.map((name) {
@@ -24,19 +32,13 @@ class _PlayState extends State<Play> {
               score: playController.getPlayerScore(name),
               kong: playController.getPlayerGang(name),
               onHu: (name, baseScore) {
-                setState(() {
-                  playController.onHu(name, baseScore);
-                });
+                _dispatch(Action.hu, name, baseScore);
               },
               onGang: (name, baseScore) {
-                setState(() {
-                  playController.onGang(name, baseScore);
-                });
+                _dispatch(Action.gang, name, baseScore);
               },
               onZimo: (name, baseScore) {
-                setState(() {
-                  playController.onHu(name, baseScore, ziMo: true);
-                });
+                _dispatch(Action.zimo, name, baseScore, ziMo: true);
               }));
     });
   }
@@ -63,6 +65,30 @@ class _PlayState extends State<Play> {
                         style:
                             const TextStyle(fontSize: 26, color: Colors.white),
                       )),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            foregroundColor: playController.canUndo()
+                                ? Colors.white
+                                : Colors.grey),
+                        onPressed: () {
+                          setState(() {
+                            playController.undo();
+                          });
+                        },
+                        child: const Text('撤销'),
+                      ),
+                      TextButton(
+                        style: TextButton.styleFrom(
+                            foregroundColor: playController.canRedo()
+                                ? Colors.white
+                                : Colors.grey),
+                        onPressed: () {
+                          setState(() {
+                            playController.redo();
+                          });
+                        },
+                        child: const Text('重做'),
+                      ),
                       ElevatedButton(
                           onPressed: () {
                             // 点击按钮的时候，警告弹框提示是否要重置
@@ -77,7 +103,7 @@ class _PlayState extends State<Play> {
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                             setState(() {
-                                              playController.reset();
+                                              playController.resetState();
                                             });
                                           },
                                           child: const Text('确认'),

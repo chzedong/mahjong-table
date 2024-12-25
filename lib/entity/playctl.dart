@@ -1,35 +1,38 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
+import 'package:flutter_application_1/type.dart';
+import './undo-manager.dart';
 
-class PlayController {
-  List<int> players = [100, 100, 100, 100];
+class PlayController extends PlayState {
+  final UndoManager _undoManager = UndoManager();
 
-  List<int> gangs = [0, 0, 0, 0];
+  void undo() {
+    _undoManager.undo(this);
+  }
 
-  List<int> banker = [0, 0];
+  void redo() {
+    _undoManager.redo(this);
+  }
 
-  List<String> names = ['东', '南', '西', '北'];
+  bool canUndo() {
+    return _undoManager.undoStack.isNotEmpty;
+  }
 
-  int start = 0;
+  bool canRedo() {
+    return _undoManager.redoStack.isNotEmpty;
+  }
 
   int get bankerIndex {
     if (kDebugMode) {
-      print('bankerIndex: $banker');
+      print('banker: $banker');
       print('score:${players[0] + players[1] + players[2] + players[3]}');
     }
+
     return banker[0] % players.length;
   }
 
   int get bankerNumber {
     return banker[1];
-  }
-
-  void reset() {
-    players = [100, 100, 100, 100];
-    gangs = [0, 0, 0, 0];
-    banker = [0, 0];
-    start = 0;
   }
 
   bool isEnd() {
@@ -43,12 +46,37 @@ class PlayController {
     return n * gup + (isLong ? long : base);
   }
 
-  void onGang(String name, int attach) {
+  @override
+  void dispatch(Action action, String name, int attach,
+      {bool ziMo = false, bool isLong = false}) {
+    // stack
+    _undoManager.push(UndoAction(this,
+        name: name,
+        attach: attach,
+        isLong: isLong,
+        ziMo: ziMo,
+        action: action));
+
+    if (action == Action.hu || action == Action.zimo) {
+      _onHu(name, attach, ziMo: ziMo, isLong: isLong);
+    } else if (action == Action.gang) {
+      _onGang(name, attach);
+    } else {
+      reset();
+    }
+  }
+
+  void resetState() {
+    dispatch(Action.reset, '', 0);
+  }
+
+  void _onGang(String name, int attach) {
     final index = names.indexOf(name);
     gangs[index] += attach;
   }
 
-  void onHu(String name, int attach, {bool ziMo = false, bool isLong = false}) {
+  void _onHu(String name, int attach,
+      {bool ziMo = false, bool isLong = false}) {
     final index = names.indexOf(name);
 
     int preBankerNumber = banker[1];

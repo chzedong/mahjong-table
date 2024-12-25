@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Action;
 import 'package:flutter_application_1/radio.dart';
-
-enum Action { hu, zimo, gang }
+import 'package:flutter_application_1/type.dart';
 
 Map _colorMap = {
-  '东': const Color.fromARGB(228, 78, 163, 248),
+  '东': Colors.blue[200],
   '南': const Color.fromARGB(255, 111, 155, 216),
   '西': const Color.fromARGB(255, 9, 100, 174),
   '北': const Color.fromARGB(255, 140, 187, 220),
