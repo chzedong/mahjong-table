@@ -9,9 +9,12 @@ class MyHomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('麻将桌',
-            style: TextStyle(color: Colors.white, fontSize: 26)),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+                fontWeight: FontWeight.bold)),
         centerTitle: true,
-        backgroundColor: Colors.lightBlue, // 设置背景颜
+        backgroundColor: Colors.grey[900], // 设置背景颜
       ),
       body: const Center(child: Play()),
     );

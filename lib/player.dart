@@ -4,9 +4,9 @@ import 'package:flutter_application_1/type.dart';
 
 Map _colorMap = {
   '东': Colors.blue[200],
-  '南': const Color.fromARGB(255, 111, 155, 216),
-  '西': const Color.fromARGB(255, 9, 100, 174),
-  '北': const Color.fromARGB(255, 140, 187, 220),
+  '南': Colors.blue[300],
+  '西': Colors.blue[200],
+  '北': Colors.blue[300],
 };
 
 class Player extends StatelessWidget {
@@ -121,22 +121,22 @@ class Player extends StatelessWidget {
                     isBanker != -1 ? '庄家: 第$isBanker局' : '闲家',
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 24,
+                        fontSize: 20,
                         color: isBanker != -1
                             ? const Color.fromARGB(255, 155, 60, 4)
                             : const Color.fromARGB(255, 208, 172, 9)),
                   ),
                   Text(
                     name,
-                    style: const TextStyle(fontSize: 22, color: Colors.white),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   Text(
                     '点数： $score',
-                    style: const TextStyle(fontSize: 22, color: Colors.white),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                   Text(
                     '杠： $kong',
-                    style: const TextStyle(fontSize: 22, color: Colors.white),
+                    style: const TextStyle(fontSize: 18, color: Colors.white),
                   ),
                 ],
               ),
@@ -150,18 +150,27 @@ class Player extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(10, 28),
+                            backgroundColor: Colors.green[300]),
                         child: const Text('胡'),
                         onPressed: () {
                           showInputDialog(context, Action.hu);
                         }),
-                    const SizedBox(height: 10), //
+                    const SizedBox(height: 10),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(10, 28),
+                            backgroundColor: Colors.orange[200]),
                         child: const Text('自摸'),
                         onPressed: () {
                           showInputDialog(context, Action.zimo);
                         }),
-                    const SizedBox(height: 10), //
+                    const SizedBox(height: 10),
                     ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                            minimumSize: const Size(10, 28),
+                            backgroundColor: Colors.purple[100]),
                         child: const Text('杠'),
                         onPressed: () {
                           showInputDialog(context, Action.gang);

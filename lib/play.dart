@@ -50,26 +50,33 @@ class _PlayState extends State<Play> {
       child: Column(
         children: [
           Expanded(
+              flex: 1,
+              child: SizedBox(
+                  width: double.infinity,
+                  child: Column(
+                    children: getPlayers().toList(),
+                  ))),
+          Expanded(
               flex: 0,
               child: Container(
-                color: Colors.lightBlue,
+                color: Colors.grey[900],
                 width: double.infinity,
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(10),
                   child: Row(
                     children: [
                       Expanded(
                           child: Text(
                         '第 ${(playController.start + 1).toString()} 局',
                         style:
-                            const TextStyle(fontSize: 26, color: Colors.white),
+                            const TextStyle(fontSize: 20, color: Colors.white),
                       )),
                       TextButton(
                         style: TextButton.styleFrom(
                             foregroundColor: playController.canUndo()
                                 ? Colors.white
-                                : Colors.grey),
+                                : Colors.grey[400]),
                         onPressed: () {
                           setState(() {
                             playController.undo();
@@ -81,7 +88,7 @@ class _PlayState extends State<Play> {
                         style: TextButton.styleFrom(
                             foregroundColor: playController.canRedo()
                                 ? Colors.white
-                                : Colors.grey),
+                                : Colors.grey[400]),
                         onPressed: () {
                           setState(() {
                             playController.redo();
@@ -89,7 +96,13 @@ class _PlayState extends State<Play> {
                         },
                         child: const Text('重做'),
                       ),
-                      ElevatedButton(
+
+                      // 重开
+                      TextButton(
+                          style: TextButton.styleFrom(
+                              textStyle:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                              foregroundColor: Colors.white),
                           onPressed: () {
                             // 点击按钮的时候，警告弹框提示是否要重置
                             showDialog(
@@ -116,13 +129,6 @@ class _PlayState extends State<Play> {
                   ),
                 ),
               )),
-          Expanded(
-              flex: 1,
-              child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    children: getPlayers().toList(),
-                  )))
         ],
       ),
     );
