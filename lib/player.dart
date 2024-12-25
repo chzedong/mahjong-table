@@ -45,9 +45,11 @@ class Player extends StatelessWidget {
     Widget content = TextField(
       controller: _textEditingController,
       keyboardType: TextInputType.number,
+      autofocus: true,
       decoration: const InputDecoration(
         hintText: '几个风',
         border: OutlineInputBorder(),
+        // 自动聚焦
       ),
     );
 
