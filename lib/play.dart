@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart' hide Action;
+import 'package:flutter_application_1/components/settle.dart';
+import 'package:flutter_application_1/components/undo.dart';
 import 'package:flutter_application_1/entity/playctl.dart';
 import 'package:flutter_application_1/player.dart';
 import 'package:flutter_application_1/type.dart';
@@ -49,6 +51,33 @@ class _PlayState extends State<Play> {
       width: double.infinity,
       child: Column(
         children: [
+          // header
+          Container(
+            color: Colors.grey[900],
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    '第 ${(playController.start + 1).toString()} 局',
+                    style: const TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                  Undo(
+                      undo: () => setState(() {
+                            playController.undo();
+                          }),
+                      redo: () => setState(() {
+                            playController.redo();
+                          }),
+                      canUndo: playController.canUndo(),
+                      canRedo: playController.canRedo())
+                ],
+              ),
+            ),
+          ),
           Expanded(
               flex: 1,
               child: SizedBox(
@@ -65,38 +94,9 @@ class _PlayState extends State<Play> {
                 child: Padding(
                   padding: const EdgeInsets.all(10),
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
-                          child: Text(
-                        '第 ${(playController.start + 1).toString()} 局',
-                        style:
-                            const TextStyle(fontSize: 20, color: Colors.white),
-                      )),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            foregroundColor: playController.canUndo()
-                                ? Colors.white
-                                : Colors.grey[400]),
-                        onPressed: () {
-                          setState(() {
-                            playController.undo();
-                          });
-                        },
-                        child: const Text('撤销'),
-                      ),
-                      TextButton(
-                        style: TextButton.styleFrom(
-                            foregroundColor: playController.canRedo()
-                                ? Colors.white
-                                : Colors.grey[400]),
-                        onPressed: () {
-                          setState(() {
-                            playController.redo();
-                          });
-                        },
-                        child: const Text('重做'),
-                      ),
-
+                      Settle(playController: playController),
                       // 重开
                       TextButton(
                           style: TextButton.styleFrom(
