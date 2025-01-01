@@ -106,11 +106,13 @@ class Settle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextButton(
-        style: TextButton.styleFrom(
-            textStyle: const TextStyle(fontWeight: FontWeight.bold),
-            foregroundColor: Colors.white),
-        onPressed: () => onPressed(context),
-        child: const Text('结算'));
+    return ListTile(
+      leading: const Icon(Icons.check),
+      title: const Text('结算'),
+      onTap: () {
+        Navigator.of(context).pop();
+        onPressed(context);
+      },
+    );
   }
 }

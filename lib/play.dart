@@ -47,37 +47,32 @@ class _PlayState extends State<Play> {
 
   @override
   Widget build(BuildContext context) {
+    resetWidget() {
+      // 点击按钮的时候，警告弹框提示是否要重置
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: const Text('重开'),
+                content: const Text('是否要重新开始？'),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      setState(() {
+                        playController.resetState();
+                      });
+                    },
+                    child: const Text('确认'),
+                  )
+                ]);
+          });
+    }
+
     return SizedBox(
       width: double.infinity,
       child: Column(
         children: [
-          // header
-          Container(
-            color: Colors.grey[900],
-            width: double.infinity,
-            alignment: Alignment.center,
-            child: Padding(
-              padding: const EdgeInsets.all(10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    '第 ${(playController.start + 1).toString()} 局',
-                    style: const TextStyle(fontSize: 20, color: Colors.white),
-                  ),
-                  Undo(
-                      undo: () => setState(() {
-                            playController.undo();
-                          }),
-                      redo: () => setState(() {
-                            playController.redo();
-                          }),
-                      canUndo: playController.canUndo(),
-                      canRedo: playController.canRedo())
-                ],
-              ),
-            ),
-          ),
           Expanded(
               flex: 1,
               child: SizedBox(
@@ -96,35 +91,68 @@ class _PlayState extends State<Play> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Settle(playController: playController),
-                      // 重开
-                      TextButton(
-                          style: TextButton.styleFrom(
-                              textStyle:
-                                  const TextStyle(fontWeight: FontWeight.bold),
-                              foregroundColor: Colors.white),
+                      Text(
+                        '第 ${(playController.start + 1).toString()} 局',
+                        style:
+                            const TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      // 更多按钮
+                      TextButton.icon(
                           onPressed: () {
-                            // 点击按钮的时候，警告弹框提示是否要重置
-                            showDialog(
+                            // 底部抽屉
+                            showModalBottomSheet(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AlertDialog(
-                                      title: const Text('重开'),
-                                      content: const Text('是否要重新开始？'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
+                                  // 列表
+                                  return Column(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      ListTile(
+                                        leading: const Icon(Icons.refresh),
+                                        title: const Text('重开'),
+                                        onTap: () {
+                                          // 重开逻辑
+                                          Navigator.of(context).pop();
+                                          resetWidget();
+                                        },
+                                      ),
+                                      Settle(playController: playController),
+                                      ListTile(
+                                        // 禁止点击反显
+                                        enabled: playController.canUndo(),
+                                        leading: const Icon(Icons.undo),
+                                        title: const Text('撤销'),
+                                        onTap: () {
+                                          // 撤销逻辑
+                                          if (playController.canUndo()) {
                                             Navigator.of(context).pop();
                                             setState(() {
-                                              playController.resetState();
+                                              playController.undo();
                                             });
-                                          },
-                                          child: const Text('确认'),
-                                        )
-                                      ]);
+                                          }
+                                        },
+                                      ),
+                                      ListTile(
+                                        // 禁止点击反显
+                                        enabled: playController.canRedo(),
+                                        leading: const Icon(Icons.redo),
+                                        title: const Text('重做'),
+                                        onTap: () {
+                                          // 重做逻辑
+                                          if (playController.canRedo()) {
+                                            Navigator.of(context).pop();
+                                            setState(() {
+                                              playController.redo();
+                                            });
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  );
                                 });
                           },
-                          child: const Text('重开'))
+                          label: const Icon(Icons.more_horiz,
+                              color: Colors.white)),
                     ],
                   ),
                 ),
