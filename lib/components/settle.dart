@@ -30,7 +30,7 @@ class Settle extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: realSettle.asMap().entries.map((entry) {
                 int index = entry.key;
-                int score = entry.value;
+                double score = entry.value;
                 return ListTile(
                   title: Text('${playController.names[index]} : ${score} 元'),
                 );

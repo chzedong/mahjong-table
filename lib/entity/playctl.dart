@@ -144,8 +144,8 @@ class PlayController extends PlayState {
   }
 
   // 结算
-  List<int> settle(int market, int gangMoney) {
-    List<int> result = [];
+  List<double> settle(int market, int gangMoney) {
+    List<double> result = [];
     for (int i = 0; i < players.length; i++) {
       final playerScore = players[i];
       // 点数净赚
@@ -154,7 +154,9 @@ class PlayController extends PlayState {
       final realGang = getPlayerRealGang(names[i]);
       final gang = realGang * gangMoney;
 
-      result.add(scoreMoney.toInt() + gang);
+      // scoreMoney 保留一位小数
+      final roundedScoreMoney = double.parse(scoreMoney.toStringAsFixed(1));
+      result.add(roundedScoreMoney + gang);
     }
 
     return result;
